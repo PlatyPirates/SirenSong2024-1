@@ -70,8 +70,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser); */
 
-    m_FrontRightDrive.setInverted(true);
-    m_BackRightDrive.setInverted(true);
+    m_FrontRightDrive.setInverted(false);
+    m_BackRightDrive.setInverted(false);
 
     m_BackLeftDrive.follow(m_FrontLeftDrive);
     m_BackRightDrive.follow(m_FrontRightDrive);
@@ -122,8 +122,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //Old code method was empty.
-    double forward = applyDeadband(-m_controller.getLeftY());
-    double turn = applyDeadband(-m_controller.getRightX());
+    double forward = applyDeadband(m_controller.getLeftY());
+    double turn = applyDeadband(m_controller.getRightX());
 
     m_robotDrive.arcadeDrive(forward, turn);
   }
