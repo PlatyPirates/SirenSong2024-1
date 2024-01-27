@@ -14,9 +14,6 @@
  * - This program was completely created in the newest version of WPILib, which might also hopefully help since WPILib said there was a compatibility
  *   issue.
  * - Created using the basic steps on the WPILib documentation that Ms. Emily posted in Slack.
- * - Not in any repository so we'll need to make a repository and run it on the normal laptop or get an ethernet dongle to run it from this computer.
- * 
-
 
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
