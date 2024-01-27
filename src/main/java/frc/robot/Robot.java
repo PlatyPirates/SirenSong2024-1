@@ -23,12 +23,17 @@
 
 package frc.robot;
 
+import frc.robot.Constants.*;
+
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /* Old code contained:
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -44,16 +49,17 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>(); */
 
   //TODO Variable Initialization
-  private final PWMSparkMax m_leftDrive = new PWMSparkMax(0);
-  private final PWMSparkMax m_rightDrive = new PWMSparkMax(1);
-  private final DifferentialDrive m_robotDrive =
-      new DifferentialDrive(m_leftDrive::set, m_rightDrive::set);
+  private final CANSparkMax m_FrontLeftDrive = new CANSparkMax(DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax m_FrontRightDrive = new CANSparkMax(DrivetrainConstants.frontRightMotor, MotorType.kBrushless);
+  private final CANSparkMax m_BackLeftDrive = new CANSparkMax(DrivetrainConstants.backLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax m_BackRightDrive = new CANSparkMax(DrivetrainConstants.backRightMotor, MotorType.kBrushless);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_FrontLeftDrive, m_FrontRightDrive);
   private final XboxController m_controller = new XboxController(0);
   private final Timer m_timer = new Timer();
 
   public Robot() { //Note: this method was not present in the old code.
-    SendableRegistry.addChild(m_robotDrive, m_leftDrive);
-    SendableRegistry.addChild(m_robotDrive, m_rightDrive);
+    SendableRegistry.addChild(m_robotDrive, m_FrontLeftDrive);
+    SendableRegistry.addChild(m_robotDrive, m_FrontLeftDrive);
   }
 
   @Override
@@ -64,7 +70,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser); */
 
-    m_rightDrive.setInverted(true);
+    m_FrontRightDrive.setInverted(false);
+    m_BackRightDrive.setInverted(false);
+
+    m_BackLeftDrive.follow(m_FrontLeftDrive);
+    m_BackRightDrive.follow(m_FrontRightDrive);
   }
 
   /*Old code contained:
@@ -112,7 +122,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //Old code method was empty.
-    m_robotDrive.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
+    double forward = applyDeadband(m_controller.getLeftY());
+    double turn = applyDeadband(m_controller.getRightX());
+
+    m_robotDrive.arcadeDrive(forward, turn);
   }
 
   @Override
@@ -121,23 +134,11 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  /*Old code contained:
-  
-  public void teleopInit() {}
-
-  @Override
-  public void teleopPeriodic() {}
-
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void simulationInit() {}
-
-  @Override
-  public void simulationPeriodic() {} */
+  private double applyDeadband(double value) {
+    if (Math.abs(value) < JoystickConstants.deadband)
+      return 0.0;
+    else
+      return (value - Math.copySign(0.1, value)) / (1 - JoystickConstants.deadband);
+  }
 
 }
