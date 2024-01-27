@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
   private final Timer m_timer = new Timer();
 
   public Robot() { //Note: this method was not present in the old code.
-    SendableRegistry.addChild(m_robotDrive, m_leftDrive);
-    SendableRegistry.addChild(m_robotDrive, m_rightDrive);
+    SendableRegistry.addChild(m_robotDrive, m_FrontLeftDrive);
+    SendableRegistry.addChild(m_robotDrive, m_FrontLeftDrive);
   }
 
   @Override
