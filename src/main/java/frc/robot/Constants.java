@@ -51,13 +51,13 @@ public final class Constants {
     public static final double intakeMotorPower = 0.5;
     public static final int pivotMotor = 6;
     public static final double pivotMotorPower = 0.2;
-    public static final int armMotor = 7;
-    public static final double armMotorPower = 0.2;
+    public static final int clawMotor = 7;
+    public static final double clawMotorPower = 0.2;
 
     public static final float pivotLimitIn = 0.0f;
     public static final float pivotLimitOut = 28.0f; // this will be negated in the subsystem because negative means out
-    public static final float armLimitIn = 0.0f;
-    public static final float armLimitOut = 9.5f; // this will remain positive in the subsystem because positive means out
+    public static final float clawLimitIn = 0.0f;
+    public static final float clawLimitOut = 9.5f; // this will remain positive in the subsystem because positive means out
   }
 
   public static final class JoystickConstants {

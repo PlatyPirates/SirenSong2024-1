@@ -31,6 +31,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+//Added more stuff that we used last year, just trying to see if this helps some of my errors
+import edu.wpi.first.wpilibj2.command.Command; 
+import edu.wpi.first.wpilibj2.command.InstantCommand; 
+import edu.wpi.first.wpilibj2.command.RunCommand; 
+import edu.wpi.first.wpilibj2.command.WaitCommand; 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController; 
+import edu.wpi.first.wpilibj2.command.button.JoystickButton; 
+import edu.wpi.first.wpilibj2.command.button.Trigger; 
+
+import frc.robot.subsystems.DualClaw;
+import frc.robot.commands.Reach;
+
+import javax.sound.sampled.Port;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -54,7 +68,15 @@ public class Robot extends TimedRobot {
   private final CANSparkMax m_BackLeftDrive = new CANSparkMax(DrivetrainConstants.backLeftMotor, MotorType.kBrushless);
   private final CANSparkMax m_BackRightDrive = new CANSparkMax(DrivetrainConstants.backRightMotor, MotorType.kBrushless);
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_FrontLeftDrive, m_FrontRightDrive);
-  private final XboxController m_controller = new XboxController(0);
+
+  //make new spark max things here 
+
+  //changed the controller name to driver so we can begin working on opporator duties like climber arms (also changed it in other instances)
+  private final XboxController _driver = new XboxController(0);
+  private final XboxController _operator = new XboxController(1);
+
+  //private final DualClaw _dualClaw = new DualClaw();
+
   private final Timer m_timer = new Timer();
 
   public Robot() { //Note: this method was not present in the old code.
@@ -122,8 +144,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //Old code method was empty.
-    double forward = applyDeadband(m_controller.getLeftY());
-    double turn = applyDeadband(m_controller.getRightX());
+    double forward = applyDeadband(_driver.getLeftY());
+    double turn = applyDeadband(_driver.getRightX());
 
     m_robotDrive.arcadeDrive(forward, turn);
   }
